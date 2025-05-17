@@ -1,75 +1,96 @@
 # LLM Reasoning Techniques
 
-Este projeto demonstra diferentes técnicas de raciocínio usando Large Language Models (LLMs), especificamente o Gemini Flash 2.0.
+Demonstração de diferentes técnicas de raciocínio usando o modelo Gemini Flash 2.0 para previsão do tempo.
 
-## Técnicas Implementadas
+## Instalação
 
-1. Tool-Augmented Reasoning
-2. Chain-of-Thought
-3. Justificativas (Rationale Engineering)
-4. In-Context Learning
-5. Finetuning Simulado
-6. Memória e Contexto
-7. Protocolo de Contexto
-
-## Estrutura do Projeto
-
-```
-llm-reasoning-techniques/
-├── api/                    # Endpoints Flask
-├── strategies/            # Implementações das estratégias
-│   ├── tool_augmented/
-│   ├── chain_of_thought/
-│   ├── rationale/
-│   ├── in_context/
-│   ├── finetuning/
-│   ├── memory/
-│   └── protocol/
-├── frontend/             # Interface Streamlit
-├── tests/               # Testes unitários
-└── utils/              # Funções auxiliares
-```
-
-## Configuração
-
-1. Instale as dependências:
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Configure as variáveis de ambiente:
-- Crie um arquivo `.env` na raiz do projeto
-- Adicione sua chave API do Gemini:
+## Configuração
+
+1. Crie um arquivo `.env` na raiz do projeto:
 ```
 GEMINI_API_KEY=sua_chave_aqui
+FLASK_ENV=development
+FLASK_APP=api/app.py
 ```
 
-## Executando o Projeto
+## Executando
 
-1. Inicie o servidor Flask:
+1. Inicie a API:
 ```bash
-python api/app.py
+python -m api.app
 ```
 
-2. Inicie a interface Streamlit:
+2. Em outro terminal, inicie a interface:
 ```bash
 streamlit run frontend/app.py
 ```
 
-## API OpenMeteo
+## Técnicas de Raciocínio
 
-O projeto utiliza a API OpenMeteo para dados meteorológicos:
+### 1. Tool-Augmented Reasoning
+**Objetivo**: Usar ferramentas externas (API do tempo) para enriquecer o raciocínio.
+**Teste**: "Qual a temperatura máxima prevista para hoje?"
+```bash
+curl -X POST http://localhost:5000/api/tool-augmented -H "Content-Type: application/json" -d '{"query":"Qual a temperatura máxima prevista para hoje?"}'
 ```
-https://api.open-meteo.com/v1/forecast
+
+### 2. Chain-of-Thought
+**Objetivo**: Mostrar o passo a passo do raciocínio de forma explícita.
+**Teste**: "Vai fazer calor e chover hoje?"
+```bash
+curl -X POST http://localhost:5000/api/chain-of-thought -H "Content-Type: application/json" -d '{"query":"Vai fazer calor e chover hoje?"}'
 ```
 
-## Endpoints
+### 3. Rationale Engineering
+**Objetivo**: Fornecer justificativas explícitas para cada conclusão.
+**Teste**: "Devo levar guarda-chuva?"
+```bash
+curl -X POST http://localhost:5000/api/rationale -H "Content-Type: application/json" -d '{"query":"Devo levar guarda-chuva?"}'
+```
 
-- `/api/tool-augmented`: Testes de Tool-Augmented Reasoning
-- `/api/chain-of-thought`: Testes de Chain-of-Thought
-- `/api/rationale`: Testes de Rationale Engineering
-- `/api/in-context`: Testes de In-Context Learning
-- `/api/finetuning`: Testes de Finetuning Simulado
-- `/api/memory`: Testes de Memória e Contexto
-- `/api/protocol`: Testes de Protocolo de Contexto
-- `/api/all`: Endpoint combinando todas as estratégias 
+### 4. In-Context Learning
+**Objetivo**: Aprender com exemplos anteriores para formatar respostas.
+**Teste**: "Como está o clima?"
+```bash
+curl -X POST http://localhost:5000/api/in-context -H "Content-Type: application/json" -d '{"query":"Como está o clima?"}'
+```
+
+### 5. Finetuning Simulado
+**Objetivo**: Simular um modelo fine-tuned com regras predefinidas.
+**Teste**: "Qual a previsão para hoje?"
+```bash
+curl -X POST http://localhost:5000/api/finetuning -H "Content-Type: application/json" -d '{"query":"Qual a previsão para hoje?"}'
+```
+
+### 6. Memória e Contexto
+**Objetivo**: Manter histórico da conversa para respostas contextualizadas.
+**Teste**: "E amanhã, como vai estar?"
+```bash
+curl -X POST http://localhost:5000/api/memory -H "Content-Type: application/json" -d '{"query":"E amanhã, como vai estar?"}'
+```
+
+### 7. Protocolo de Contexto
+**Objetivo**: Seguir um formato específico de resposta com regras definidas.
+**Teste**: "Me dê um resumo do tempo"
+```bash
+curl -X POST http://localhost:5000/api/protocol -H "Content-Type: application/json" -d '{"query":"Me dê um resumo do tempo"}'
+```
+
+### Testando Todas as Estratégias
+Para ver todas as estratégias em ação:
+```bash
+curl -X POST http://localhost:5000/api/all -H "Content-Type: application/json" -d '{"query":"Como está o tempo hoje?"}'
+```
+
+## Dados Meteorológicos
+O projeto usa a API OpenMeteo para dados meteorológicos:
+- Temperatura máxima e mínima
+- Probabilidade de precipitação
+- Dados para Porto Alegre, São Paulo e Recife
+
+## Interface Web
+Acesse http://localhost:8501 para usar a interface Streamlit e testar todas as estratégias de forma interativa. 
